@@ -1,4 +1,4 @@
-## reimplement the AttnGAN and change the first stage to wgan.
+## Reimplement the AttnGAN and change the first stage to wgan.
 
 ## AttnGAN
 
