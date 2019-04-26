@@ -329,7 +329,7 @@ class INIT_STAGE_G(nn.Module):
         # state size ngf x 4 x 4
         out_code = self.fc(c_z_code)
         out_code = out_code.view(-1, self.gf_dim, 4, 4)
-        # state size ngf/3 x 8 x 8
+        # state size ngf/2 x 8 x 8
         out_code = self.upsample1(out_code)
         # state size ngf/4 x 16 x 16
         out_code = self.upsample2(out_code)
@@ -425,24 +425,24 @@ class G_NET(nn.Module):
         att_maps = []
         c_code, mu, logvar = self.ca_net(sent_emb)
 
-        if cfg.TREE.BRANCH_NUM > 0:
-            h_code1 = self.h_net1(z_code, c_code)
-            fake_img1 = self.img_net1(h_code1)
-            fake_imgs.append(fake_img1)
-        if cfg.TREE.BRANCH_NUM > 1:
-            h_code2, att1 = \
-                self.h_net2(h_code1, c_code, word_embs, mask)
-            fake_img2 = self.img_net2(h_code2)
-            fake_imgs.append(fake_img2)
-            if att1 is not None:
-                att_maps.append(att1)
-        if cfg.TREE.BRANCH_NUM > 2:
-            h_code3, att2 = \
-                self.h_net3(h_code2, c_code, word_embs, mask)
-            fake_img3 = self.img_net3(h_code3)
-            fake_imgs.append(fake_img3)
-            if att2 is not None:
-                att_maps.append(att2)
+        
+        h_code1 = self.h_net1(z_code, c_code)
+        fake_img1 = self.img_net1(h_code1)
+        fake_imgs.append(fake_img1)
+        
+        h_code2, att1 = \
+            self.h_net2(h_code1, c_code, word_embs, mask)
+        fake_img2 = self.img_net2(h_code2)
+        fake_imgs.append(fake_img2)
+        if att1 is not None:
+            att_maps.append(att1)
+        
+        h_code3, att2 = \
+            self.h_net3(h_code2, c_code, word_embs, mask)
+        fake_img3 = self.img_net3(h_code3)
+        fake_imgs.append(fake_img3)
+        if att2 is not None:
+            att_maps.append(att2)
 
         return fake_imgs, att_maps, mu, logvar
 
@@ -501,11 +501,29 @@ def Block3x3_leakRelu(in_planes, out_planes):
     return block
 
 
+def Block3x3_leakRelu_WGAN(in_planes, out_planes):
+    block = nn.Sequential(
+        conv3x3(in_planes, out_planes),
+        nn.InstanceNorm2d(out_planes, affine=True),
+        nn.LeakyReLU(0.2, inplace=True)
+    )
+    return block
+
+
 # Downsale the spatial size by a factor of 2
 def downBlock(in_planes, out_planes):
     block = nn.Sequential(
         nn.Conv2d(in_planes, out_planes, 4, 2, 1, bias=False),
         nn.BatchNorm2d(out_planes),
+        nn.LeakyReLU(0.2, inplace=True)
+    )
+    return block
+
+
+def downBlock_WGAN(in_planes, out_planes):
+    block = nn.Sequential(
+        nn.Conv2d(in_planes, out_planes, 4, 2, 1, bias=False),
+        nn.InstanceNorm2d(out_planes, affine=True),
         nn.LeakyReLU(0.2, inplace=True)
     )
     return block
@@ -532,6 +550,33 @@ def encode_image_by_16times(ndf):
     )
     return encode_img
 
+#### ````````````````````````````````````````````````````````````````````````
+#### ````````````````````````````````````````````````````````````````````````
+#### ````````````````````````````````````````````````````````````````````````
+def encode_image_by_16times_WGAN(ndf):
+    encode_img = nn.Sequential(
+        # --> state size. ndf x in_size/2 x in_size/2
+        nn.Conv2d(3, ndf, 4, 2, 1, bias=False),
+        nn.LeakyReLU(0.2, inplace=True),
+        # --> state size 2ndf x x in_size/4 x in_size/4
+        nn.Conv2d(ndf, ndf * 2, 4, 2, 1, bias=False),
+        nn.InstanceNorm2d(ndf * 2 , affine=True),
+        nn.LeakyReLU(0.2, inplace=True),
+        # --> state size 4ndf x in_size/8 x in_size/8
+        nn.Conv2d(ndf * 2, ndf * 4, 4, 2, 1, bias=False),
+        nn.InstanceNorm2d(ndf * 4, affine=True),
+        nn.LeakyReLU(0.2, inplace=True),
+        # --> state size 8ndf x in_size/16 x in_size/16
+        nn.Conv2d(ndf * 4, ndf * 8, 4, 2, 1, bias=False),
+        nn.InstanceNorm2d(ndf * 8, affine=True),
+        nn.LeakyReLU(0.2, inplace=True)
+    )
+    return encode_img
+
+#### ````````````````````````````````````````````````````````````````````````
+#### ````````````````````````````````````````````````````````````````````````
+#### ````````````````````````````````````````````````````````````````````````
+
 
 class D_GET_LOGITS(nn.Module):
     def __init__(self, ndf, nef, bcondition=False):
@@ -545,6 +590,34 @@ class D_GET_LOGITS(nn.Module):
         self.outlogits = nn.Sequential(
             nn.Conv2d(ndf * 8, 1, kernel_size=4, stride=4),
             nn.Sigmoid())
+
+    def forward(self, h_code, c_code=None):
+        if self.bcondition and c_code is not None:
+            # conditioning output
+            c_code = c_code.view(-1, self.ef_dim, 1, 1)
+            c_code = c_code.repeat(1, 1, 4, 4)
+            # state size (ngf+egf) x 4 x 4
+            h_c_code = torch.cat((h_code, c_code), 1)
+            # state size ngf x in_size x in_size
+            h_c_code = self.jointConv(h_c_code)
+        else:
+            h_c_code = h_code
+
+        output = self.outlogits(h_c_code)
+        return output.view(-1)
+
+
+class D_GET_LOGITS_WGAN(nn.Module):
+    def __init__(self, ndf, nef, bcondition=False):
+        super(D_GET_LOGITS_WGAN, self).__init__()
+        self.df_dim = ndf
+        self.ef_dim = nef
+        self.bcondition = bcondition
+        if self.bcondition:
+            self.jointConv = Block3x3_leakRelu_WGAN(ndf * 8 + nef, ndf * 8)
+
+        self.outlogits = nn.Sequential(
+            nn.Conv2d(ndf * 8, 1, kernel_size=4, stride=4))
 
     def forward(self, h_code, c_code=None):
         if self.bcondition and c_code is not None:
@@ -579,6 +652,39 @@ class D_NET64(nn.Module):
         x_code4 = self.img_code_s16(x_var)  # 4 x 4 x 8df
         return x_code4
 
+class D_NET64_WGAN(nn.Module):
+    def __init__(self, b_jcu=True):
+        super(D_NET64_WGAN, self).__init__()
+        ndf = cfg.GAN.DF_DIM
+        nef = cfg.TEXT.EMBEDDING_DIM
+        self.img_code_s16 = encode_image_by_16times_WGAN(ndf)
+        if b_jcu:
+            self.UNCOND_DNET = D_GET_LOGITS_WGAN(ndf, nef, bcondition=False)
+        else:
+            self.UNCOND_DNET = None
+        self.COND_DNET = D_GET_LOGITS_WGAN(ndf, nef, bcondition=True)
+
+    def forward(self, x_var):
+        x_code4 = self.img_code_s16(x_var)  # 4 x 4 x 8df
+        return x_code4
+
+
+class D_NET64_halfWGAN(nn.Module):
+    def __init__(self, b_jcu=True):
+        super(D_NET64_halfWGAN, self).__init__()
+        ndf = cfg.GAN.DF_DIM
+        nef = cfg.TEXT.EMBEDDING_DIM
+        self.img_code_s16 = encode_image_by_16times_WGAN(ndf)
+        if b_jcu:
+            self.UNCOND_DNET = D_GET_LOGITS_WGAN(ndf, nef, bcondition=False)
+        else:
+            self.UNCOND_DNET = None
+        self.COND_DNET = D_GET_LOGITS(ndf, nef, bcondition=True)
+
+    def forward(self, x_var):
+        x_code4 = self.img_code_s16(x_var)  # 4 x 4 x 8df
+        return x_code4
+
 
 # For 128 x 128 images
 class D_NET128(nn.Module):
@@ -603,6 +709,28 @@ class D_NET128(nn.Module):
         return x_code4
 
 
+class D_NET128_halfWGAN(nn.Module):
+    def __init__(self, b_jcu=True):
+        super(D_NET128_halfWGAN, self).__init__()
+        ndf = cfg.GAN.DF_DIM
+        nef = cfg.TEXT.EMBEDDING_DIM
+        self.img_code_s16 = encode_image_by_16times_WGAN(ndf)
+        self.img_code_s32 = downBlock_WGAN(ndf * 8, ndf * 16)
+        self.img_code_s32_1 = Block3x3_leakRelu_WGAN(ndf * 16, ndf * 8)
+        #
+        if b_jcu:
+            self.UNCOND_DNET = D_GET_LOGITS_WGAN(ndf, nef, bcondition=False)
+        else:
+            self.UNCOND_DNET = None
+        self.COND_DNET = D_GET_LOGITS(ndf, nef, bcondition=True)
+
+    def forward(self, x_var):
+        x_code8 = self.img_code_s16(x_var)   # 8 x 8 x 8df
+        x_code4 = self.img_code_s32(x_code8)   # 4 x 4 x 16df
+        x_code4 = self.img_code_s32_1(x_code4)  # 4 x 4 x 8df
+        return x_code4
+
+
 # For 256 x 256 images
 class D_NET256(nn.Module):
     def __init__(self, b_jcu=True):
@@ -616,6 +744,33 @@ class D_NET256(nn.Module):
         self.img_code_s64_2 = Block3x3_leakRelu(ndf * 16, ndf * 8)
         if b_jcu:
             self.UNCOND_DNET = D_GET_LOGITS(ndf, nef, bcondition=False)
+        else:
+            self.UNCOND_DNET = None
+        self.COND_DNET = D_GET_LOGITS(ndf, nef, bcondition=True)
+
+    def forward(self, x_var):
+        x_code16 = self.img_code_s16(x_var)
+        x_code8 = self.img_code_s32(x_code16)
+        x_code4 = self.img_code_s64(x_code8)
+        x_code4 = self.img_code_s64_1(x_code4)
+        x_code4 = self.img_code_s64_2(x_code4)
+        return x_code4
+
+
+
+
+class D_NET256_halfWGAN(nn.Module):
+    def __init__(self, b_jcu=True):
+        super(D_NET256_halfWGAN, self).__init__()
+        ndf = cfg.GAN.DF_DIM
+        nef = cfg.TEXT.EMBEDDING_DIM
+        self.img_code_s16 = encode_image_by_16times_WGAN(ndf)
+        self.img_code_s32 = downBlock_WGAN(ndf * 8, ndf * 16)
+        self.img_code_s64 = downBlock_WGAN(ndf * 16, ndf * 32)
+        self.img_code_s64_1 = Block3x3_leakRelu_WGAN(ndf * 32, ndf * 16)
+        self.img_code_s64_2 = Block3x3_leakRelu_WGAN(ndf * 16, ndf * 8)
+        if b_jcu:
+            self.UNCOND_DNET = D_GET_LOGITS_WGAN(ndf, nef, bcondition=False)
         else:
             self.UNCOND_DNET = None
         self.COND_DNET = D_GET_LOGITS(ndf, nef, bcondition=True)

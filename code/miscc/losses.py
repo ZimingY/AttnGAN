@@ -6,6 +6,9 @@ from miscc.config import cfg
 
 from GlobalAttention import func_attention
 
+from torch.autograd import Variable
+from torch import autograd
+
 
 # ##################Loss for matching text-image###################
 def cosine_similarity(x1, x2, dim=1, eps=1e-8):
@@ -161,7 +164,162 @@ def discriminator_loss(netD, real_imgs, fake_imgs, conditions,
     return errD
 
 
-def generator_loss(netsD, image_encoder, fake_imgs, real_labels,
+def discriminator_loss_WGAN(netD, real_imgs, fake_imgs, conditions,
+                       real_labels, fake_labels):
+    # Forward
+    real_features = netD(real_imgs)
+    fake_features = netD(fake_imgs.detach())
+    # loss
+    #
+    cond_real_logits = netD.COND_DNET(real_features, conditions)
+    cond_real_errD = cond_real_logits.mean()
+    cond_fake_logits = netD.COND_DNET(fake_features, conditions)
+    cond_fake_errD = cond_fake_logits.mean()
+    #
+    batch_size = real_features.size(0)
+    cond_wrong_logits = netD.COND_DNET(real_features[:(batch_size - 1)], conditions[1:batch_size])
+    cond_wrong_errD = cond_wrong_logits.mean()
+
+    if netD.UNCOND_DNET is not None:
+        real_logits = netD.UNCOND_DNET(real_features)
+        fake_logits = netD.UNCOND_DNET(fake_features)
+        real_errD = real_logits.mean()
+        fake_errD = fake_logits.mean()
+        errD = ((-real_errD - cond_real_errD) / 2. +
+                (fake_errD + cond_fake_errD + cond_wrong_errD) / 3.)
+    else:
+        errD = -cond_real_errD + (cond_fake_errD + cond_wrong_errD) / 2.
+
+    ###############. calculate gradient panalty ###############.
+
+    lambda_term = 10
+
+    eta = torch.FloatTensor(batch_size,1,1,1).uniform_(0,1)
+    eta = eta.expand(batch_size, real_imgs.size(1), real_imgs.size(2), real_imgs.size(3))
+    eta = eta.cuda()
+
+    interpolated = eta * real_imgs + ((1 - eta) * fake_imgs)
+
+    interpolated = interpolated.cuda()
+
+    # define it to calculate gradient
+    interpolated = Variable(interpolated, requires_grad=True)
+
+    # calculate probability of interpolated examples
+    prob = netD(interpolated)
+    prob_con = netD.COND_DNET(prob, conditions)
+    prob_uncon = netD.UNCOND_DNET(prob)
+
+
+    # calculate gradients of probabilities with respect to examples
+    gradients_con = autograd.grad(outputs=prob_con, inputs=interpolated,
+                           grad_outputs=torch.ones(
+                               prob_con.size()).cuda(),
+                           create_graph=True, retain_graph=True,only_inputs=True)[0]
+    # Gradients have shape (batch_size, num_channels, img_width, img_height),
+    gradients_con = gradients_con.view(gradients_con.size(0), -1)
+
+    grad_penalty_con = ((gradients_con.norm(2, dim=1) - 1) ** 2).mean() * lambda_term
+
+    gradients_uncon = autograd.grad(outputs=prob_uncon, inputs=interpolated,
+                           grad_outputs=torch.ones(
+                               prob_uncon.size()).cuda(),
+                           create_graph=True, retain_graph=True,only_inputs=True)[0]
+    # Gradients have shape (batch_size, num_channels, img_width, img_height),
+    gradients_uncon = gradients_uncon.view(gradients_uncon.size(0), -1)
+
+    grad_penalty_uncon = ((gradients_uncon.norm(2, dim=1) - 1) ** 2).mean() * lambda_term
+
+
+    return errD, (grad_penalty_uncon+grad_penalty_con)/2
+
+
+
+
+def discriminator_loss_halfWGAN(netD, real_imgs, fake_imgs, conditions,
+                       real_labels, fake_labels):
+    # Forward
+    real_features = netD(real_imgs)
+    fake_features = netD(fake_imgs.detach())
+    # loss
+    #
+    cond_real_logits = netD.COND_DNET(real_features, conditions)
+    cond_real_errD = nn.BCELoss()(cond_real_logits, real_labels)
+    cond_real_errD = cond_real_errD.mean()
+    cond_fake_logits = netD.COND_DNET(fake_features, conditions)
+    cond_fake_errD = nn.BCELoss()(cond_fake_logits, fake_labels)
+    cond_fake_errD = cond_fake_errD.mean()
+    #
+    batch_size = real_features.size(0)
+    cond_wrong_logits = netD.COND_DNET(real_features[:(batch_size - 1)], conditions[1:batch_size])
+    cond_wrong_errD = nn.BCELoss()(cond_wrong_logits, fake_labels[1:batch_size])
+    cond_wrong_errD = cond_wrong_errD.mean()
+
+    if netD.UNCOND_DNET is not None:
+        real_logits = netD.UNCOND_DNET(real_features)
+        fake_logits = netD.UNCOND_DNET(fake_features)
+        real_errD = real_logits.mean()
+        fake_errD = fake_logits.mean()
+        errD = ((-real_errD + cond_real_errD) / 2. +
+                (fake_errD + cond_fake_errD + cond_wrong_errD) / 3.)
+    else:
+        errD = -cond_real_errD + (cond_fake_errD + cond_wrong_errD) / 2.
+    ###############. calculate gradient panalty ###############.
+    lambda_term = 10
+    eta = torch.FloatTensor(batch_size,1,1,1).uniform_(0,1)
+    eta = eta.expand(batch_size, real_imgs.size(1), real_imgs.size(2), real_imgs.size(3))
+    eta = eta.cuda()
+
+    interpolated = eta * real_imgs + ((1 - eta) * fake_imgs)
+    interpolated = interpolated.cuda()
+    # define it to calculate gradient
+    interpolated = Variable(interpolated, requires_grad=True)
+
+    # calculate probability of interpolated examples
+    prob = netD(interpolated)
+    prob_uncon = netD.UNCOND_DNET(prob)
+    # calculate gradients of probabilities with respect to examples
+    gradients_uncon = autograd.grad(outputs=prob_uncon, inputs=interpolated,
+                           grad_outputs=torch.ones(
+                               prob_uncon.size()).cuda(),
+                           create_graph=True, retain_graph=True,only_inputs=True)[0]
+    # Gradients have shape (batch_size, num_channels, img_width, img_height),
+    gradients_uncon = gradients_uncon.view(gradients_uncon.size(0), -1)
+    grad_penalty_uncon = ((gradients_uncon.norm(2, dim=1) - 1) ** 2).mean() * lambda_term
+    return errD, grad_penalty_uncon
+
+# def calculate_gradient_penalty(batch_size, real_images, fake_images, D):
+#     lambda_term = 10
+
+
+
+#     eta = torch.FloatTensor(batch_size,1,1,1).uniform_(0,1)
+#     eta = eta.expand(batch_size, real_images.size(1), real_images.size(2), real_images.size(3))
+#     eta = eta.cuda()
+
+#     interpolated = eta * real_images + ((1 - eta) * fake_images)
+
+#     interpolated = interpolated.cuda()
+
+#     # define it to calculate gradient
+#     interpolated = Variable(interpolated, requires_grad=True)
+
+#     # calculate probability of interpolated examples
+#     prob_interpolated = D(interpolated)
+
+#     # calculate gradients of probabilities with respect to examples
+#     gradients = autograd.grad(outputs=prob_interpolated, inputs=interpolated,
+#                            grad_outputs=torch.ones(
+#                                prob_interpolated.size()).cuda(),
+#                            create_graph=True, retain_graph=True,only_inputs=True)[0]
+#     # Gradients have shape (batch_size, num_channels, img_width, img_height),
+#     gradients = gradients.view(gradients.size(0), -1)
+
+#     grad_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * lambda_term
+#     return grad_penalty
+
+
+def generator_loss_halfWGAN(netsD, image_encoder, fake_imgs, real_labels,
                    words_embs, sent_emb, match_labels,
                    cap_lens, class_ids):
     numDs = len(netsD)
@@ -173,15 +331,128 @@ def generator_loss(netsD, image_encoder, fake_imgs, real_labels,
         features = netsD[i](fake_imgs[i])
         cond_logits = netsD[i].COND_DNET(features, sent_emb)
         cond_errG = nn.BCELoss()(cond_logits, real_labels)
-        if netsD[i].UNCOND_DNET is  not None:
+        cond_errG = cond_errG.mean()
+
+        if netsD[i].UNCOND_DNET is  not None: # default one
             logits = netsD[i].UNCOND_DNET(features)
+            errG = logits.mean()
+            g_loss = -errG + cond_errG
+        else:
+            g_loss = cond_errG
+
+        errG_total += g_loss
+        logs += 'g_loss%d: %.2f ' % (i, g_loss.item())
+
+        # Ranking loss
+        if i == (numDs - 1):
+            # words_features: batch_size x nef x 17 x 17
+            # sent_code: batch_size x nef
+            region_features, cnn_code = image_encoder(fake_imgs[i])
+            w_loss0, w_loss1, _ = words_loss(region_features, words_embs,
+                                             match_labels, cap_lens,
+                                             class_ids, batch_size)
+            w_loss = (w_loss0 + w_loss1) * \
+                cfg.TRAIN.SMOOTH.LAMBDA
+            
+            s_loss0, s_loss1 = sent_loss(cnn_code, sent_emb,
+                                         match_labels, class_ids, batch_size)
+            s_loss = (s_loss0 + s_loss1) * \
+                cfg.TRAIN.SMOOTH.LAMBDA
+
+            errG_total += w_loss + s_loss
+            logs += 'w_loss: %.2f s_loss: %.2f ' % (w_loss.item(), s_loss.item())
+    return errG_total, logs
+
+
+
+
+
+def generator_loss_WGAN_epoch(netsD, image_encoder, fake_imgs, real_labels,
+                   words_embs, sent_emb, match_labels,
+                   cap_lens, class_ids):
+    numDs = len(netsD)
+    batch_size = real_labels.size(0)
+    logs = ''
+    # Forward
+    errG_total = 0
+    for i in range(numDs):
+        if i ==0:            
+            features = netsD[i](fake_imgs[i])
+            cond_logits = netsD[i].COND_DNET(features, sent_emb)
+            cond_errG = cond_logits.mean()
+            # cond_errG = nn.BCELoss()(cond_logits, real_labels)
+
+            logits = netsD[i].UNCOND_DNET(features) 
+            # errG = nn.BCELoss()(logits, real_labels)
+            errG = logits.mean()
+            errG_0 = (-errG - cond_errG)
+            # errG_0 = errG +  cond_errG
+
+            logs += 'g_loss%d: %.2f ' % (i, errG_0.item())
+
+        else:
+
+            features = netsD[i](fake_imgs[i])
+            cond_logits = netsD[i].COND_DNET(features, sent_emb)
+            cond_errG = nn.BCELoss()(cond_logits, real_labels)
+
+            if netsD[i].UNCOND_DNET is  not None: # default one
+                logits = netsD[i].UNCOND_DNET(features)
+                errG = nn.BCELoss()(logits, real_labels)
+                g_loss = errG + cond_errG
+            else:
+                g_loss = cond_errG
+            errG_total += g_loss
+            # err_img = errG_total.data[0]
+            # logs += 'g_loss%d: %.2f ' % (i, g_loss.data[0])
+            logs += 'g_loss%d: %.2f ' % (i, g_loss.item())
+
+            # Ranking loss
+            if i == (numDs - 1):
+                # words_features: batch_size x nef x 17 x 17
+                # sent_code: batch_size x nef
+                region_features, cnn_code = image_encoder(fake_imgs[i])
+                w_loss0, w_loss1, _ = words_loss(region_features, words_embs,
+                                                 match_labels, cap_lens,
+                                                 class_ids, batch_size)
+                w_loss = (w_loss0 + w_loss1) * \
+                    cfg.TRAIN.SMOOTH.LAMBDA
+                
+                s_loss0, s_loss1 = sent_loss(cnn_code, sent_emb,
+                                             match_labels, class_ids, batch_size)
+                s_loss = (s_loss0 + s_loss1) * \
+                    cfg.TRAIN.SMOOTH.LAMBDA
+
+                errG_total += w_loss + s_loss
+                logs += 'w_loss: %.2f s_loss: %.2f ' % (w_loss.item(), s_loss.item())
+    return errG_0, errG_total, logs
+
+
+
+def generator_loss(netsD, image_encoder, fake_imgs, real_labels,
+                   words_embs, sent_emb, match_labels,
+                   cap_lens, class_ids):
+    numDs = len(netsD)
+    batch_size = real_labels.size(0)
+    logs = ''
+    # Forward
+    errG_total = 0
+    for i in range(numDs):
+        features = netsD[i](fake_imgs[i])
+        cond_logits = netsD[i].COND_DNET(features, sent_emb)
+        # self.UNCOND_DNET = D_GET_LOGITS(ndf, nef, bcondition=True)
+        cond_errG = nn.BCELoss()(cond_logits, real_labels) # intro log
+        if netsD[i].UNCOND_DNET is  not None: # default one
+            logits = netsD[i].UNCOND_DNET(features) # conv and sig the netD[]
+            # self.UNCOND_DNET = D_GET_LOGITS(ndf, nef, bcondition=False)
             errG = nn.BCELoss()(logits, real_labels)
             g_loss = errG + cond_errG
         else:
             g_loss = cond_errG
         errG_total += g_loss
         # err_img = errG_total.data[0]
-        logs += 'g_loss%d: %.2f ' % (i, g_loss.data[0])
+        # logs += 'g_loss%d: %.2f ' % (i, g_loss.data[0])
+        logs += 'g_loss%d: %.2f ' % (i, g_loss.item())
 
         # Ranking loss
         if i == (numDs - 1):
@@ -202,7 +473,7 @@ def generator_loss(netsD, image_encoder, fake_imgs, real_labels,
             # err_sent = err_sent + s_loss.data[0]
 
             errG_total += w_loss + s_loss
-            logs += 'w_loss: %.2f s_loss: %.2f ' % (w_loss.data[0], s_loss.data[0])
+            logs += 'w_loss: %.2f s_loss: %.2f ' % (w_loss.item(), s_loss.item())
     return errG_total, logs
 
 

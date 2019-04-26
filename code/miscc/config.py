@@ -56,6 +56,18 @@ __C.GAN.R_NUM = 2
 __C.GAN.B_ATTENTION = True
 __C.GAN.B_DCGAN = False
 
+# wgan option
+__C.WGAN = edict()
+__C.WGAN.GP = True
+__C.WGAN.GENERATOR = 40000
+__C.WGAN.epoch = 1000
+__C.WGAN.CRITIC = 5
+__C.WGAN.BATCH_SIZE = 20
+__C.WGAN.BATCH_SIZE_yin = 14
+__C.WGAN.SNAPSHOT_INTERVAL = 10
+
+
+
 
 __C.TEXT = edict()
 __C.TEXT.CAPTIONS_PER_IMAGE = 10

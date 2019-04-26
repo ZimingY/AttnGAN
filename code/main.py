@@ -3,6 +3,8 @@ from __future__ import print_function
 from miscc.config import cfg, cfg_from_file
 from datasets import TextDataset
 from trainer import condGANTrainer as trainer
+from trainer_WGAN import condGANTrainer as trainer_WGAN
+from trainer_WGAN_epoch import condGANTrainer as trainer_WGAN_epoch
 
 import os
 import sys
@@ -36,7 +38,7 @@ def parse_args():
 def gen_example(wordtoix, algo):
     '''generate images from example sentences'''
     from nltk.tokenize import RegexpTokenizer
-    filepath = '%s/example_filenames.txt' % (cfg.DATA_DIR)
+    filepath = '%s/example_filenames2.txt' % (cfg.DATA_DIR)
     data_dic = {}
     with open(filepath, "r") as f:
         filenames = f.read().decode('utf8').split('\n')
@@ -95,8 +97,13 @@ if __name__ == "__main__":
 
     if args.data_dir != '':
         cfg.DATA_DIR = args.data_dir
+
+
     print('Using config:')
     pprint.pprint(cfg)
+
+
+
 
     if not cfg.TRAIN.FLAG:
         args.manualSeed = 100
@@ -110,8 +117,7 @@ if __name__ == "__main__":
 
     now = datetime.datetime.now(dateutil.tz.tzlocal())
     timestamp = now.strftime('%Y_%m_%d_%H_%M_%S')
-    output_dir = '../output/%s_%s_%s' % \
-        (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
+
 
     split_dir, bshuffle = 'train', True
     if not cfg.TRAIN.FLAG:
@@ -128,14 +134,49 @@ if __name__ == "__main__":
                           base_size=cfg.TREE.BASE_SIZE,
                           transform=image_transform)
     assert dataset
-    dataloader = torch.utils.data.DataLoader(
+
+    if cfg.WGAN.GP:
+        print('-'*80)
+        print('train with wgan epoch setting ')
+        print('-'*80)
+
+        output_dir = '../output_WGAN_epoch/%s_%s_%s' % \
+        (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
+
+        dataloader = torch.utils.data.DataLoader(
+        dataset, batch_size=cfg.WGAN.BATCH_SIZE_yin,
+        drop_last=True, shuffle=bshuffle, num_workers=int(cfg.WORKERS))
+        algo = trainer_WGAN_epoch(output_dir, dataloader, dataset.n_words, dataset.ixtoword)
+
+
+    else:
+        print('-'*80)
+        print('train with original setting')
+        print('-'*80)
+
+        output_dir = '../output/%s_%s_%s' % \
+        (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp) # output/birds_attn2_timestamp
+
+        dataloader = torch.utils.data.DataLoader(
         dataset, batch_size=cfg.TRAIN.BATCH_SIZE,
         drop_last=True, shuffle=bshuffle, num_workers=int(cfg.WORKERS))
+        algo = trainer(output_dir, dataloader, dataset.n_words, dataset.ixtoword)
+
+
 
     # Define models and go to train/evaluate
-    algo = trainer(output_dir, dataloader, dataset.n_words, dataset.ixtoword)
+
+    ####################
+    ####################
+    ####################
+    
+
+    # algo = trainer(output_dir, dataloader, dataset.n_words, dataset.ixtoword)
 
     start_t = time.time()
+    print("-"*80)
+    print("the training for D and G is ",cfg.TRAIN.FLAG)
+    print("-"*80)
     if cfg.TRAIN.FLAG:
         algo.train()
     else:

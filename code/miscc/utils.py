@@ -12,6 +12,9 @@ import skimage.transform
 
 from miscc.config import cfg
 
+from torch.autograd import Variable
+from torch import autograd
+
 
 # For visualization ################################################
 COLOR_DIC = {0:[128,64,128],  1:[244, 35,232],
@@ -96,14 +99,18 @@ def build_super_images(real_imgs, captions, ixtoword,
     # batch x seq_len x 17 x 17 --> batch x 1 x 17 x 17
     seq_len = max_word_num
     img_set = []
-    num = nvis  # len(attn_maps)
+    num =  nvis #len(attn_maps) 
 
     text_map, sentences = \
         drawCaption(text_convas, captions, ixtoword, vis_size)
     text_map = np.asarray(text_map).astype(np.uint8)
 
     bUpdate = 1
+
+
     for i in range(num):
+
+
         attn = attn_maps[i].cpu().view(1, -1, att_sze, att_sze)
         # --> 1 x 1 x 17 x 17
         attn_max = attn.max(dim=1, keepdim=True)
@@ -314,3 +321,9 @@ def mkdir_p(path):
             pass
         else:
             raise
+
+
+
+
+### WGAN
+

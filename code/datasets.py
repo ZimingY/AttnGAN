@@ -125,7 +125,7 @@ class TextDataset(data.Dataset):
                                         delim_whitespace=True,
                                         header=None).astype(int)
         #
-        filepath = os.path.join(data_dir, 'CUB_200_2011/images.txt')
+        filepath = os.path.join(data_dir, 'CUB_200_2011/images.txt') # image names
         df_filenames = \
             pd.read_csv(filepath, delim_whitespace=True, header=None)
         filenames = df_filenames[1].tolist()

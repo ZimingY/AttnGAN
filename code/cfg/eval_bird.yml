@@ -2,17 +2,18 @@ CONFIG_NAME: 'attn2'
 
 DATASET_NAME: 'birds'
 DATA_DIR: '../data/birds'
-GPU_ID: 3
+GPU_ID: 0
 WORKERS: 1
 
-B_VALIDATION: False  # True  # False
+B_VALIDATION: False  # True generate images for all captions in the validation dataset 
 TREE:
     BRANCH_NUM: 3
 
 
 TRAIN:
     FLAG: False
-    NET_G: '../models/bird_AttnGAN2.pth'
+    # NET_G: '../models/bird_AttnGAN2.pth'
+    NET_G: '../output_WGAN/birds_attn2_2019_04_15_13_57_31/Model/netG_epoch_280.pth'
     B_NET_D: False
     BATCH_SIZE: 100
     NET_E: '../DAMSMencoders/bird/text_encoder200.pth'

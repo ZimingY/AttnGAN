@@ -100,11 +100,11 @@ def train(dataloader, cnn_model, rnn_model, batch_size,
         if step % UPDATE_INTERVAL == 0:
             count = epoch * len(dataloader) + step
 
-            s_cur_loss0 = s_total_loss0[0] / UPDATE_INTERVAL
-            s_cur_loss1 = s_total_loss1[0] / UPDATE_INTERVAL
+            s_cur_loss0 = s_total_loss0.item() / UPDATE_INTERVAL
+            s_cur_loss1 = s_total_loss1.item() / UPDATE_INTERVAL
 
-            w_cur_loss0 = w_total_loss0[0] / UPDATE_INTERVAL
-            w_cur_loss1 = w_total_loss1[0] / UPDATE_INTERVAL
+            w_cur_loss0 = w_total_loss0.item() / UPDATE_INTERVAL
+            w_cur_loss1 = w_total_loss1.item() / UPDATE_INTERVAL
 
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d}/{:5d} batches | ms/batch {:5.2f} | '
@@ -157,8 +157,8 @@ def evaluate(dataloader, cnn_model, rnn_model, batch_size):
         if step == 50:
             break
 
-    s_cur_loss = s_total_loss[0] / step
-    w_cur_loss = w_total_loss[0] / step
+    s_cur_loss = s_total_loss.item() / step
+    w_cur_loss = w_total_loss.item() / step
 
     return s_cur_loss, w_cur_loss
 
@@ -184,6 +184,21 @@ def build_models():
         start_epoch = cfg.TRAIN.NET_E[istart:iend]
         start_epoch = int(start_epoch) + 1
         print('start_epoch', start_epoch)
+####################
+####################
+####################
+        print("````````````````````````````````````````````")
+        print("use pretrained model")
+        print("````````````````````````````````````````````")
+    else:
+        print("````````````````````````````````````````````")
+        print("not use pretrained model")
+        print("````````````````````````````````````````````")
+
+#####################
+#####################
+#####################
+
     if cfg.CUDA:
         text_encoder = text_encoder.cuda()
         image_encoder = image_encoder.cuda()
@@ -204,6 +219,8 @@ if __name__ == "__main__":
 
     if args.data_dir != '':
         cfg.DATA_DIR = args.data_dir
+
+
     print('Using config:')
     pprint.pprint(cfg)
 
@@ -257,7 +274,10 @@ if __name__ == "__main__":
         shuffle=True, num_workers=int(cfg.WORKERS))
 
     # Train ##############################################################
+
     text_encoder, image_encoder, labels, start_epoch = build_models()
+
+
     para = list(text_encoder.parameters())
     for v in image_encoder.parameters():
         if v.requires_grad:
