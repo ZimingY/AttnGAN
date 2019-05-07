@@ -1,0 +1,452 @@
+Using config:
+{'B_VALIDATION': False,
+ 'CONFIG_NAME': 'attn2',
+ 'CUDA': True,
+ 'DATASET_NAME': 'birds',
+ 'DATA_DIR': '/u/ziming/AttnGAN/data/birds',
+ 'GAN': {'B_ATTENTION': True,
+         'B_DCGAN': False,
+         'CONDITION_DIM': 100,
+         'DF_DIM': 64,
+         'GF_DIM': 32,
+         'R_NUM': 2,
+         'Z_DIM': 100},
+ 'GPU_ID': 0,
+ 'RNN_TYPE': 'LSTM',
+ 'TEXT': {'CAPTIONS_PER_IMAGE': 10, 'EMBEDDING_DIM': 256, 'WORDS_NUM': 18},
+ 'TRAIN': {'BATCH_SIZE': 20,
+           'B_NET_D': True,
+           'DISCRIMINATOR_LR': 0.0001,
+           'ENCODER_LR': 0.0002,
+           'FLAG': True,
+           'GENERATOR_LR': 5e-05,
+           'MAX_EPOCH': 600,
+           'NET_E': '/u/ziming/AttnGAN/DAMSMencoders/bird/text_encoder200.pth',
+           'NET_G': '',
+           'RNN_GRAD_CLIP': 0.25,
+           'SMOOTH': {'GAMMA1': 4.0,
+                      'GAMMA2': 5.0,
+                      'GAMMA3': 10.0,
+                      'LAMBDA': 5.0},
+           'SNAPSHOT_INTERVAL': 50},
+ 'TREE': {'BASE_SIZE': 64, 'BRANCH_NUM': 3},
+ 'WORKERS': 4}
+Total filenames:  11788 001.Black_footed_Albatross/Black_Footed_Albatross_0046_18.jpg
+Load filenames from: /u/ziming/AttnGAN/data/birds/train/filenames.pickle (8855)
+Load filenames from: /u/ziming/AttnGAN/data/birds/test/filenames.pickle (2933)
+Load from:  /u/ziming/AttnGAN/data/birds/captions.pickle
+Load pretrained model from  https://download.pytorch.org/models/inception_v3_google-1a9a5a14.pth
+Load image encoder from: /u/ziming/AttnGAN/DAMSMencoders/bird/image_encoder200.pth
+Load text encoder from: /u/ziming/AttnGAN/DAMSMencoders/bird/text_encoder200.pth
+# of netsD 3
+errD0: 9.10 errD1: 9.61 errD2: 11.14 
+g_loss0: -0.11 g_loss1: -0.26 g_loss2: -0.08 w_loss: 32.22 s_loss: 29.93 kl_loss: 0.01 
+errD0: 9.33 errD1: 9.96 errD2: 11.25 
+g_loss0: -0.14 g_loss1: -0.37 g_loss2: -0.21 w_loss: 29.09 s_loss: 28.96 kl_loss: 0.01 
+errD0: 9.34 errD1: 10.32 errD2: 11.26 
+g_loss0: -0.22 g_loss1: -0.65 g_loss2: -0.15 w_loss: 37.09 s_loss: 28.82 kl_loss: 0.01 
+errD0: 9.19 errD1: 10.27 errD2: 11.20 
+g_loss0: -0.25 g_loss1: -0.80 g_loss2: -0.17 w_loss: 25.67 s_loss: 26.68 kl_loss: 0.01 
+[0/600][442]
+                  Loss_D: 30.53 Loss_G: 55.87 Time: 362.20s
+Save G/Ds models.
+errD0: 9.31 errD1: 10.53 errD2: 11.29 
+g_loss0: -0.31 g_loss1: -0.81 g_loss2: -0.15 w_loss: 25.82 s_loss: 28.41 kl_loss: 0.01 
+errD0: 9.47 errD1: 10.70 errD2: 11.30 
+g_loss0: -0.41 g_loss1: -1.04 g_loss2: -0.14 w_loss: 27.80 s_loss: 26.03 kl_loss: 0.01 
+errD0: 9.41 errD1: 10.50 errD2: 11.26 
+g_loss0: -0.39 g_loss1: -1.09 g_loss2: -0.27 w_loss: 22.54 s_loss: 22.19 kl_loss: 0.01 
+errD0: 9.47 errD1: 10.91 errD2: 11.40 
+g_loss0: -0.47 g_loss1: -1.30 g_loss2: -0.28 w_loss: 16.85 s_loss: 23.13 kl_loss: 0.01 
+[1/600][442]
+                  Loss_D: 31.96 Loss_G: 36.71 Time: 354.42s
+errD0: 9.59 errD1: 11.07 errD2: 11.43 
+g_loss0: -0.48 g_loss1: -1.36 g_loss2: -0.21 w_loss: 19.17 s_loss: 25.32 kl_loss: 0.01 
+errD0: 9.57 errD1: 11.05 errD2: 11.39 
+g_loss0: -0.45 g_loss1: -1.51 g_loss2: -0.23 w_loss: 17.62 s_loss: 21.06 kl_loss: 0.01 
+errD0: 9.56 errD1: 10.97 errD2: 11.35 
+g_loss0: -0.56 g_loss1: -1.62 g_loss2: -0.28 w_loss: 26.31 s_loss: 20.66 kl_loss: 0.01 
+errD0: 9.63 errD1: 11.28 errD2: 11.34 
+g_loss0: -0.58 g_loss1: -1.89 g_loss2: -0.33 w_loss: 16.82 s_loss: 19.36 kl_loss: 0.01 
+errD0: 9.64 errD1: 11.41 errD2: 11.27 
+g_loss0: -0.70 g_loss1: -2.00 g_loss2: -0.36 w_loss: 15.79 s_loss: 18.84 kl_loss: 0.01 
+[2/600][442]
+                  Loss_D: 32.38 Loss_G: 32.24 Time: 382.11s
+errD0: 9.60 errD1: 11.56 errD2: 11.45 
+g_loss0: -0.72 g_loss1: -2.29 g_loss2: -0.37 w_loss: 16.02 s_loss: 18.24 kl_loss: 0.01 
+errD0: 9.82 errD1: 11.93 errD2: 11.51 
+g_loss0: -0.79 g_loss1: -2.28 g_loss2: -0.38 w_loss: 18.35 s_loss: 21.79 kl_loss: 0.01 
+errD0: 9.79 errD1: 12.04 errD2: 11.34 
+g_loss0: -0.86 g_loss1: -2.53 g_loss2: -0.37 w_loss: 16.03 s_loss: 18.99 kl_loss: 0.01 
+errD0: 9.87 errD1: 12.11 errD2: 11.44 
+g_loss0: -0.82 g_loss1: -2.66 g_loss2: -0.38 w_loss: 12.94 s_loss: 18.23 kl_loss: 0.01 
+[3/600][442]
+                  Loss_D: 33.01 Loss_G: 30.99 Time: 354.63s
+errD0: 9.97 errD1: 12.23 errD2: 11.51 
+g_loss0: -0.97 g_loss1: -2.72 g_loss2: -0.36 w_loss: 17.38 s_loss: 18.57 kl_loss: 0.01 
+errD0: 9.85 errD1: 12.15 errD2: 11.40 
+g_loss0: -0.95 g_loss1: -2.74 g_loss2: -0.37 w_loss: 12.71 s_loss: 16.40 kl_loss: 0.01 
+errD0: 9.95 errD1: 12.40 errD2: 11.43 
+g_loss0: -0.95 g_loss1: -2.79 g_loss2: -0.32 w_loss: 14.95 s_loss: 16.81 kl_loss: 0.01 
+errD0: 9.86 errD1: 12.24 errD2: 11.44 
+g_loss0: -0.99 g_loss1: -2.93 g_loss2: -0.39 w_loss: 15.71 s_loss: 16.70 kl_loss: 0.01 
+errD0: 10.03 errD1: 12.34 errD2: 11.44 
+g_loss0: -1.05 g_loss1: -2.91 g_loss2: -0.36 w_loss: 11.98 s_loss: 16.40 kl_loss: 0.01 
+[4/600][442]
+                  Loss_D: 34.19 Loss_G: 28.10 Time: 381.00s
+errD0: 10.19 errD1: 12.62 errD2: 11.53 
+g_loss0: -1.11 g_loss1: -2.87 g_loss2: -0.40 w_loss: 12.56 s_loss: 15.28 kl_loss: 0.01 
+errD0: 10.13 errD1: 12.46 errD2: 11.57 
+g_loss0: -1.13 g_loss1: -2.89 g_loss2: -0.38 w_loss: 11.95 s_loss: 13.59 kl_loss: 0.01 
+errD0: 10.15 errD1: 12.43 errD2: 11.53 
+g_loss0: -1.21 g_loss1: -2.92 g_loss2: -0.48 w_loss: 13.70 s_loss: 18.01 kl_loss: 0.01 
+errD0: 10.07 errD1: 12.46 errD2: 11.41 
+g_loss0: -1.29 g_loss1: -2.98 g_loss2: -0.39 w_loss: 13.42 s_loss: 13.78 kl_loss: 0.01 
+[5/600][442]
+                  Loss_D: 34.11 Loss_G: 31.70 Time: 354.99s
+errD0: 10.19 errD1: 12.56 errD2: 11.53 
+g_loss0: -1.27 g_loss1: -2.95 g_loss2: -0.32 w_loss: 10.59 s_loss: 14.81 kl_loss: 0.01 
+errD0: 10.02 errD1: 12.27 errD2: 11.47 
+g_loss0: -1.30 g_loss1: -3.07 g_loss2: -0.51 w_loss: 12.97 s_loss: 14.92 kl_loss: 0.01 
+errD0: 10.21 errD1: 12.44 errD2: 11.53 
+g_loss0: -1.36 g_loss1: -3.00 g_loss2: -0.47 w_loss: 10.10 s_loss: 13.01 kl_loss: 0.01 
+errD0: 10.09 errD1: 12.36 errD2: 11.47 
+g_loss0: -1.35 g_loss1: -3.12 g_loss2: -0.53 w_loss: 12.58 s_loss: 13.89 kl_loss: 0.01 
+[6/600][442]
+                  Loss_D: 34.16 Loss_G: 15.10 Time: 381.07s
+errD0: 10.36 errD1: 12.52 errD2: 11.61 
+g_loss0: -1.28 g_loss1: -3.02 g_loss2: -0.51 w_loss: 10.92 s_loss: 11.95 kl_loss: 0.01 
+errD0: 10.17 errD1: 12.33 errD2: 11.59 
+g_loss0: -1.41 g_loss1: -3.05 g_loss2: -0.41 w_loss: 9.07 s_loss: 12.32 kl_loss: 0.01 
+errD0: 10.38 errD1: 12.47 errD2: 11.48 
+g_loss0: -1.37 g_loss1: -3.07 g_loss2: -0.51 w_loss: 8.47 s_loss: 12.80 kl_loss: 0.01 
+errD0: 10.44 errD1: 12.56 errD2: 11.50 
+g_loss0: -1.42 g_loss1: -3.10 g_loss2: -0.52 w_loss: 7.26 s_loss: 11.00 kl_loss: 0.01 
+errD0: 10.49 errD1: 12.64 errD2: 11.62 
+g_loss0: -1.38 g_loss1: -3.03 g_loss2: -0.47 w_loss: 9.02 s_loss: 14.01 kl_loss: 0.01 
+[7/600][442]
+                  Loss_D: 34.11 Loss_G: 17.18 Time: 354.83s
+errD0: 10.59 errD1: 12.74 errD2: 11.57 
+g_loss0: -1.37 g_loss1: -2.89 g_loss2: -0.39 w_loss: 9.64 s_loss: 12.09 kl_loss: 0.01 
+errD0: 10.29 errD1: 12.35 errD2: 11.48 
+g_loss0: -1.43 g_loss1: -3.16 g_loss2: -0.54 w_loss: 7.95 s_loss: 10.65 kl_loss: 0.01 
+errD0: 10.36 errD1: 12.60 errD2: 11.62 
+g_loss0: -1.50 g_loss1: -3.01 g_loss2: -0.44 w_loss: 12.07 s_loss: 13.88 kl_loss: 0.01 
+errD0: 10.44 errD1: 12.59 errD2: 11.48 
+g_loss0: -1.51 g_loss1: -3.06 g_loss2: -0.48 w_loss: 7.11 s_loss: 12.18 kl_loss: 0.01 
+[8/600][442]
+                  Loss_D: 34.55 Loss_G: 14.52 Time: 355.33s
+errD0: 10.31 errD1: 12.43 errD2: 11.48 
+g_loss0: -1.48 g_loss1: -3.13 g_loss2: -0.44 w_loss: 7.25 s_loss: 10.10 kl_loss: 0.01 
+errD0: 10.42 errD1: 12.41 errD2: 11.40 
+g_loss0: -1.48 g_loss1: -3.06 g_loss2: -0.55 w_loss: 8.24 s_loss: 9.46 kl_loss: 0.01 
+errD0: 10.48 errD1: 12.55 errD2: 11.47 
+g_loss0: -1.49 g_loss1: -3.09 g_loss2: -0.43 w_loss: 9.27 s_loss: 10.24 kl_loss: 0.01 
+errD0: 10.41 errD1: 12.43 errD2: 11.55 
+g_loss0: -1.55 g_loss1: -3.11 g_loss2: -0.45 w_loss: 10.82 s_loss: 11.83 kl_loss: 0.01 
+errD0: 10.38 errD1: 12.44 errD2: 11.46 
+g_loss0: -1.54 g_loss1: -3.03 g_loss2: -0.49 w_loss: 6.90 s_loss: 9.07 kl_loss: 0.01 
+[9/600][442]
+                  Loss_D: 34.54 Loss_G: 21.75 Time: 379.48s
+errD0: 10.59 errD1: 12.53 errD2: 11.40 
+g_loss0: -1.57 g_loss1: -3.09 g_loss2: -0.50 w_loss: 8.07 s_loss: 11.16 kl_loss: 0.01 
+errD0: 10.51 errD1: 12.49 errD2: 11.55 
+g_loss0: -1.58 g_loss1: -3.18 g_loss2: -0.42 w_loss: 6.96 s_loss: 9.14 kl_loss: 0.01 
+errD0: 10.48 errD1: 12.55 errD2: 11.72 
+g_loss0: -1.54 g_loss1: -3.11 g_loss2: -0.56 w_loss: 10.52 s_loss: 12.98 kl_loss: 0.01 
+errD0: 10.46 errD1: 12.50 errD2: 11.53 
+g_loss0: -1.53 g_loss1: -3.11 g_loss2: -0.50 w_loss: 7.77 s_loss: 10.75 kl_loss: 0.01 
+[10/600][442]
+                  Loss_D: 34.76 Loss_G: 14.99 Time: 355.05s
+errD0: 10.33 errD1: 12.30 errD2: 11.59 
+g_loss0: -1.60 g_loss1: -3.14 g_loss2: -0.58 w_loss: 4.74 s_loss: 8.92 kl_loss: 0.01 
+errD0: 10.56 errD1: 12.55 errD2: 11.64 
+g_loss0: -1.58 g_loss1: -3.08 g_loss2: -0.56 w_loss: 5.99 s_loss: 11.86 kl_loss: 0.01 
+errD0: 10.52 errD1: 12.54 errD2: 11.60 
+g_loss0: -1.51 g_loss1: -3.03 g_loss2: -0.51 w_loss: 10.68 s_loss: 10.61 kl_loss: 0.01 
+errD0: 10.65 errD1: 12.66 errD2: 11.61 
+g_loss0: -1.55 g_loss1: -3.04 g_loss2: -0.53 w_loss: 8.22 s_loss: 10.81 kl_loss: 0.01 
+errD0: 10.54 errD1: 12.52 errD2: 11.51 
+g_loss0: -1.57 g_loss1: -3.08 g_loss2: -0.53 w_loss: 5.35 s_loss: 9.79 kl_loss: 0.01 
+[11/600][442]
+                  Loss_D: 34.49 Loss_G: 10.34 Time: 380.03s
+errD0: 10.54 errD1: 12.61 errD2: 11.65 
+g_loss0: -1.60 g_loss1: -3.03 g_loss2: -0.39 w_loss: 9.92 s_loss: 12.26 kl_loss: 0.01 
+errD0: 10.51 errD1: 12.55 errD2: 11.65 
+g_loss0: -1.68 g_loss1: -3.17 g_loss2: -0.67 w_loss: 6.34 s_loss: 11.41 kl_loss: 0.01 
+errD0: 10.47 errD1: 12.33 errD2: 11.55 
+g_loss0: -1.66 g_loss1: -3.09 g_loss2: -0.50 w_loss: 5.66 s_loss: 9.66 kl_loss: 0.01 
+errD0: 10.59 errD1: 12.67 errD2: 11.67 
+g_loss0: -1.68 g_loss1: -3.20 g_loss2: -0.51 w_loss: 5.91 s_loss: 11.89 kl_loss: 0.01 
+[12/600][442]
+                  Loss_D: 34.90 Loss_G: 10.84 Time: 355.16s
+errD0: 10.57 errD1: 12.45 errD2: 11.63 
+g_loss0: -1.60 g_loss1: -3.14 g_loss2: -0.58 w_loss: 7.49 s_loss: 10.28 kl_loss: 0.01 
+errD0: 10.50 errD1: 12.43 errD2: 11.58 
+g_loss0: -1.64 g_loss1: -3.13 g_loss2: -0.64 w_loss: 6.10 s_loss: 9.39 kl_loss: 0.01 
+errD0: 10.66 errD1: 12.64 errD2: 11.63 
+g_loss0: -1.60 g_loss1: -3.11 g_loss2: -0.53 w_loss: 4.94 s_loss: 10.44 kl_loss: 0.01 
+errD0: 10.63 errD1: 12.69 errD2: 11.76 
+g_loss0: -1.59 g_loss1: -3.05 g_loss2: -0.54 w_loss: 7.96 s_loss: 11.34 kl_loss: 0.01 
+[13/600][442]
+                  Loss_D: 34.72 Loss_G: 9.32 Time: 379.04s
+errD0: 10.65 errD1: 12.69 errD2: 11.62 
+g_loss0: -1.59 g_loss1: -3.09 g_loss2: -0.56 w_loss: 4.51 s_loss: 7.59 kl_loss: 0.01 
+errD0: 10.64 errD1: 12.46 errD2: 11.61 
+g_loss0: -1.57 g_loss1: -3.13 g_loss2: -0.55 w_loss: 6.17 s_loss: 9.24 kl_loss: 0.01 
+errD0: 10.51 errD1: 12.43 errD2: 11.59 
+g_loss0: -1.68 g_loss1: -3.07 g_loss2: -0.55 w_loss: 5.02 s_loss: 8.99 kl_loss: 0.01 
+errD0: 10.55 errD1: 12.54 errD2: 11.60 
+g_loss0: -1.65 g_loss1: -3.12 g_loss2: -0.55 w_loss: 6.69 s_loss: 9.02 kl_loss: 0.01 
+errD0: 10.60 errD1: 12.60 errD2: 11.65 
+g_loss0: -1.65 g_loss1: -3.10 g_loss2: -0.56 w_loss: 4.53 s_loss: 10.09 kl_loss: 0.01 
+[14/600][442]
+                  Loss_D: 34.57 Loss_G: 11.39 Time: 355.22s
+errD0: 10.64 errD1: 12.59 errD2: 11.80 
+g_loss0: -1.62 g_loss1: -3.03 g_loss2: -0.56 w_loss: 6.85 s_loss: 9.96 kl_loss: 0.01 
+errD0: 10.73 errD1: 12.57 errD2: 11.60 
+g_loss0: -1.61 g_loss1: -3.09 g_loss2: -0.62 w_loss: 6.11 s_loss: 7.87 kl_loss: 0.01 
+errD0: 10.56 errD1: 12.52 errD2: 11.62 
+g_loss0: -1.65 g_loss1: -3.10 g_loss2: -0.57 w_loss: 5.15 s_loss: 10.61 kl_loss: 0.01 
+errD0: 10.43 errD1: 12.43 errD2: 11.60 
+g_loss0: -1.64 g_loss1: -3.11 g_loss2: -0.54 w_loss: 5.21 s_loss: 7.98 kl_loss: 0.01 
+[15/600][442]
+                  Loss_D: 35.26 Loss_G: 9.51 Time: 378.93s
+errD0: 10.70 errD1: 12.64 errD2: 11.78 
+g_loss0: -1.66 g_loss1: -3.07 g_loss2: -0.62 w_loss: 4.43 s_loss: 9.17 kl_loss: 0.01 
+errD0: 10.80 errD1: 12.65 errD2: 11.81 
+g_loss0: -1.66 g_loss1: -3.11 g_loss2: -0.64 w_loss: 5.68 s_loss: 9.07 kl_loss: 0.01 
+errD0: 10.65 errD1: 12.81 errD2: 11.64 
+g_loss0: -1.69 g_loss1: -3.14 g_loss2: -0.60 w_loss: 2.93 s_loss: 7.49 kl_loss: 0.01 
+errD0: 10.73 errD1: 12.75 errD2: 11.73 
+g_loss0: -1.68 g_loss1: -3.15 g_loss2: -0.57 w_loss: 2.38 s_loss: 7.56 kl_loss: 0.01 
+errD0: 10.53 errD1: 12.49 errD2: 11.64 
+g_loss0: -1.70 g_loss1: -3.21 g_loss2: -0.57 w_loss: 6.19 s_loss: 8.44 kl_loss: 0.01 
+[16/600][442]
+                  Loss_D: 35.09 Loss_G: 11.85 Time: 354.93s
+errD0: 10.59 errD1: 12.50 errD2: 11.65 
+g_loss0: -1.68 g_loss1: -3.11 g_loss2: -0.59 w_loss: 3.96 s_loss: 6.72 kl_loss: 0.01 
+errD0: 10.53 errD1: 12.42 errD2: 11.58 
+g_loss0: -1.67 g_loss1: -3.15 g_loss2: -0.67 w_loss: 3.64 s_loss: 8.40 kl_loss: 0.01 
+errD0: 10.54 errD1: 12.56 errD2: 11.62 
+g_loss0: -1.73 g_loss1: -3.12 g_loss2: -0.61 w_loss: 1.74 s_loss: 6.54 kl_loss: 0.01 
+errD0: 10.74 errD1: 12.79 errD2: 11.76 
+g_loss0: -1.68 g_loss1: -3.09 g_loss2: -0.65 w_loss: 5.35 s_loss: 7.63 kl_loss: 0.01 
+[17/600][442]
+                  Loss_D: 34.47 Loss_G: 7.48 Time: 354.96s
+errD0: 10.70 errD1: 12.75 errD2: 11.72 
+g_loss0: -1.76 g_loss1: -3.19 g_loss2: -0.73 w_loss: 5.61 s_loss: 10.04 kl_loss: 0.01 
+errD0: 10.62 errD1: 12.49 errD2: 11.67 
+g_loss0: -1.65 g_loss1: -3.09 g_loss2: -0.61 w_loss: 2.73 s_loss: 7.03 kl_loss: 0.01 
+errD0: 10.54 errD1: 12.48 errD2: 11.65 
+g_loss0: -1.73 g_loss1: -3.19 g_loss2: -0.52 w_loss: 5.28 s_loss: 9.93 kl_loss: 0.01 
+errD0: 10.69 errD1: 12.67 errD2: 11.76 
+g_loss0: -1.80 g_loss1: -3.10 g_loss2: -0.57 w_loss: 3.81 s_loss: 8.72 kl_loss: 0.01 
+[18/600][442]
+                  Loss_D: 34.68 Loss_G: 5.28 Time: 379.06s
+errD0: 10.61 errD1: 12.52 errD2: 11.76 
+g_loss0: -1.75 g_loss1: -3.14 g_loss2: -0.65 w_loss: 4.53 s_loss: 8.40 kl_loss: 0.01 
+errD0: 10.56 errD1: 12.43 errD2: 11.63 
+g_loss0: -1.74 g_loss1: -3.06 g_loss2: -0.64 w_loss: 6.32 s_loss: 7.66 kl_loss: 0.01 
+errD0: 10.66 errD1: 12.53 errD2: 11.72 
+g_loss0: -1.74 g_loss1: -3.16 g_loss2: -0.62 w_loss: 2.22 s_loss: 7.10 kl_loss: 0.01 
+errD0: 10.74 errD1: 12.46 errD2: 11.61 
+g_loss0: -1.75 g_loss1: -3.18 g_loss2: -0.65 w_loss: 5.65 s_loss: 8.60 kl_loss: 0.01 
+errD0: 10.74 errD1: 12.48 errD2: 11.78 
+g_loss0: -1.64 g_loss1: -3.16 g_loss2: -0.65 w_loss: 4.02 s_loss: 5.85 kl_loss: 0.01 
+[19/600][442]
+                  Loss_D: 34.85 Loss_G: 9.08 Time: 355.03s
+errD0: 10.48 errD1: 12.28 errD2: 11.66 
+g_loss0: -1.85 g_loss1: -3.14 g_loss2: -0.62 w_loss: 2.89 s_loss: 5.96 kl_loss: 0.01 
+errD0: 10.68 errD1: 12.50 errD2: 11.75 
+g_loss0: -1.80 g_loss1: -3.15 g_loss2: -0.69 w_loss: 2.90 s_loss: 6.42 kl_loss: 0.01 
+errD0: 10.72 errD1: 12.58 errD2: 11.72 
+g_loss0: -1.75 g_loss1: -3.12 g_loss2: -0.66 w_loss: 5.15 s_loss: 7.31 kl_loss: 0.01 
+errD0: 10.77 errD1: 12.66 errD2: 11.74 
+g_loss0: -1.80 g_loss1: -3.13 g_loss2: -0.72 w_loss: 3.86 s_loss: 6.66 kl_loss: 0.01 
+[20/600][442]
+                  Loss_D: 34.64 Loss_G: 4.19 Time: 378.79s
+errD0: 10.71 errD1: 12.59 errD2: 11.76 
+g_loss0: -1.84 g_loss1: -3.08 g_loss2: -0.62 w_loss: 3.43 s_loss: 7.84 kl_loss: 0.01 
+errD0: 10.74 errD1: 12.61 errD2: 11.76 
+g_loss0: -1.82 g_loss1: -3.12 g_loss2: -0.68 w_loss: 4.63 s_loss: 7.28 kl_loss: 0.01 
+errD0: 10.75 errD1: 12.52 errD2: 11.79 
+g_loss0: -1.76 g_loss1: -3.11 g_loss2: -0.66 w_loss: 4.41 s_loss: 8.28 kl_loss: 0.01 
+errD0: 10.79 errD1: 12.76 errD2: 11.81 
+g_loss0: -1.82 g_loss1: -3.10 g_loss2: -0.56 w_loss: 5.78 s_loss: 7.37 kl_loss: 0.01 
+errD0: 10.77 errD1: 12.43 errD2: 11.74 
+g_loss0: -1.76 g_loss1: -3.01 g_loss2: -0.72 w_loss: 3.99 s_loss: 8.24 kl_loss: 0.01 
+[21/600][442]
+                  Loss_D: 35.14 Loss_G: 2.64 Time: 355.08s
+errD0: 10.70 errD1: 12.56 errD2: 11.82 
+g_loss0: -1.73 g_loss1: -3.10 g_loss2: -0.58 w_loss: 5.10 s_loss: 7.55 kl_loss: 0.01 
+errD0: 10.72 errD1: 12.37 errD2: 11.76 
+g_loss0: -1.82 g_loss1: -3.15 g_loss2: -0.78 w_loss: 3.20 s_loss: 6.41 kl_loss: 0.01 
+errD0: 10.84 errD1: 12.48 errD2: 11.67 
+g_loss0: -1.77 g_loss1: -3.09 g_loss2: -0.65 w_loss: 5.06 s_loss: 7.61 kl_loss: 0.01 
+errD0: 10.80 errD1: 12.58 errD2: 11.85 
+g_loss0: -1.77 g_loss1: -3.10 g_loss2: -0.68 w_loss: 2.94 s_loss: 5.36 kl_loss: 0.01 
+[22/600][442]
+                  Loss_D: 35.02 Loss_G: 5.20 Time: 379.02s
+errD0: 10.85 errD1: 12.67 errD2: 11.81 
+g_loss0: -1.79 g_loss1: -3.05 g_loss2: -0.64 w_loss: 6.36 s_loss: 7.35 kl_loss: 0.01 
+errD0: 10.70 errD1: 12.50 errD2: 11.72 
+g_loss0: -1.91 g_loss1: -3.10 g_loss2: -0.72 w_loss: 4.56 s_loss: 7.43 kl_loss: 0.01 
+errD0: 10.84 errD1: 12.71 errD2: 11.78 
+g_loss0: -1.79 g_loss1: -3.09 g_loss2: -0.65 w_loss: 2.76 s_loss: 7.22 kl_loss: 0.01 
+errD0: 10.79 errD1: 12.51 errD2: 11.77 
+g_loss0: -1.88 g_loss1: -3.08 g_loss2: -0.57 w_loss: 3.06 s_loss: 5.72 kl_loss: 0.01 
+errD0: 10.81 errD1: 12.55 errD2: 11.80 
+g_loss0: -1.82 g_loss1: -3.03 g_loss2: -0.65 w_loss: 3.45 s_loss: 6.72 kl_loss: 0.01 
+[23/600][442]
+                  Loss_D: 35.34 Loss_G: 5.39 Time: 354.97s
+errD0: 10.79 errD1: 12.51 errD2: 11.88 
+g_loss0: -1.84 g_loss1: -3.09 g_loss2: -0.72 w_loss: 3.23 s_loss: 6.99 kl_loss: 0.01 
+errD0: 10.62 errD1: 12.30 errD2: 11.76 
+g_loss0: -1.90 g_loss1: -3.15 g_loss2: -0.67 w_loss: 2.87 s_loss: 6.31 kl_loss: 0.01 
+errD0: 10.72 errD1: 12.43 errD2: 11.70 
+g_loss0: -1.81 g_loss1: -3.06 g_loss2: -0.67 w_loss: 4.83 s_loss: 7.88 kl_loss: 0.01 
+errD0: 10.76 errD1: 12.59 errD2: 11.74 
+g_loss0: -1.88 g_loss1: -3.12 g_loss2: -0.78 w_loss: 3.41 s_loss: 6.51 kl_loss: 0.01 
+[24/600][442]
+                  Loss_D: 34.79 Loss_G: 2.56 Time: 379.23s
+errD0: 10.82 errD1: 12.59 errD2: 11.82 
+g_loss0: -1.90 g_loss1: -3.10 g_loss2: -0.72 w_loss: 2.79 s_loss: 6.04 kl_loss: 0.01 
+errD0: 10.83 errD1: 12.53 errD2: 11.76 
+g_loss0: -1.84 g_loss1: -3.09 g_loss2: -0.64 w_loss: 2.54 s_loss: 5.77 kl_loss: 0.01 
+errD0: 10.74 errD1: 12.50 errD2: 11.77 
+g_loss0: -1.83 g_loss1: -3.21 g_loss2: -0.71 w_loss: 2.87 s_loss: 6.12 kl_loss: 0.01 
+errD0: 10.87 errD1: 12.60 errD2: 11.91 
+g_loss0: -1.85 g_loss1: -3.16 g_loss2: -0.78 w_loss: 4.94 s_loss: 8.98 kl_loss: 0.01 
+[25/600][442]
+                  Loss_D: 35.09 Loss_G: 5.98 Time: 354.93s
+errD0: 10.88 errD1: 12.75 errD2: 11.94 
+g_loss0: -1.92 g_loss1: -3.09 g_loss2: -0.65 w_loss: 5.67 s_loss: 7.80 kl_loss: 0.01 
+errD0: 10.95 errD1: 12.58 errD2: 11.86 
+g_loss0: -1.85 g_loss1: -3.13 g_loss2: -0.63 w_loss: 4.14 s_loss: 6.61 kl_loss: 0.01 
+errD0: 10.74 errD1: 12.49 errD2: 11.76 
+g_loss0: -1.92 g_loss1: -3.15 g_loss2: -0.74 w_loss: 3.26 s_loss: 7.73 kl_loss: 0.01 
+errD0: 10.91 errD1: 12.73 errD2: 11.86 
+g_loss0: -1.95 g_loss1: -3.10 g_loss2: -0.75 w_loss: 2.46 s_loss: 6.84 kl_loss: 0.01 
+errD0: 10.80 errD1: 12.62 errD2: 11.84 
+g_loss0: -1.84 g_loss1: -3.17 g_loss2: -0.72 w_loss: 8.76 s_loss: 9.05 kl_loss: 0.01 
+[26/600][442]
+                  Loss_D: 35.35 Loss_G: 5.61 Time: 354.96s
+errD0: 10.82 errD1: 12.50 errD2: 11.82 
+g_loss0: -1.91 g_loss1: -3.08 g_loss2: -0.64 w_loss: 3.10 s_loss: 6.26 kl_loss: 0.01 
+errD0: 10.81 errD1: 12.51 errD2: 11.78 
+g_loss0: -1.97 g_loss1: -3.19 g_loss2: -0.81 w_loss: 2.68 s_loss: 7.04 kl_loss: 0.01 
+errD0: 10.96 errD1: 12.67 errD2: 11.77 
+g_loss0: -1.92 g_loss1: -3.12 g_loss2: -0.71 w_loss: 3.72 s_loss: 7.00 kl_loss: 0.01 
+errD0: 10.87 errD1: 12.65 errD2: 11.81 
+g_loss0: -1.91 g_loss1: -3.11 g_loss2: -0.68 w_loss: 2.47 s_loss: 5.84 kl_loss: 0.01 
+[27/600][442]
+                  Loss_D: 35.03 Loss_G: 2.62 Time: 378.76s
+errD0: 10.85 errD1: 12.51 errD2: 11.83 
+g_loss0: -1.85 g_loss1: -3.01 g_loss2: -0.61 w_loss: 4.54 s_loss: 6.47 kl_loss: 0.01 
+errD0: 10.82 errD1: 12.46 errD2: 11.85 
+g_loss0: -1.91 g_loss1: -3.11 g_loss2: -0.70 w_loss: 3.93 s_loss: 5.75 kl_loss: 0.01 
+errD0: 10.80 errD1: 12.46 errD2: 11.74 
+g_loss0: -1.90 g_loss1: -3.13 g_loss2: -0.71 w_loss: 2.85 s_loss: 5.72 kl_loss: 0.01 
+errD0: 10.78 errD1: 12.38 errD2: 11.82 
+g_loss0: -1.93 g_loss1: -3.14 g_loss2: -0.73 w_loss: 2.83 s_loss: 6.17 kl_loss: 0.01 
+errD0: 10.86 errD1: 12.46 errD2: 11.83 
+g_loss0: -1.94 g_loss1: -3.10 g_loss2: -0.68 w_loss: 3.62 s_loss: 7.73 kl_loss: 0.01 
+[28/600][442]
+                  Loss_D: 35.22 Loss_G: 3.84 Time: 355.02s
+errD0: 10.95 errD1: 12.62 errD2: 11.90 
+g_loss0: -1.95 g_loss1: -3.07 g_loss2: -0.74 w_loss: 2.63 s_loss: 5.37 kl_loss: 0.01 
+errD0: 10.94 errD1: 12.51 errD2: 11.92 
+g_loss0: -1.89 g_loss1: -3.10 g_loss2: -0.67 w_loss: 4.88 s_loss: 6.09 kl_loss: 0.02 
+errD0: 10.89 errD1: 12.77 errD2: 11.84 
+g_loss0: -1.96 g_loss1: -3.15 g_loss2: -0.70 w_loss: 3.84 s_loss: 6.55 kl_loss: 0.01 
+errD0: 10.77 errD1: 12.41 errD2: 11.76 
+g_loss0: -1.97 g_loss1: -3.12 g_loss2: -0.71 w_loss: 2.81 s_loss: 6.25 kl_loss: 0.01 
+[29/600][442]
+                  Loss_D: 35.41 Loss_G: 1.07 Time: 379.25s
+errD0: 10.83 errD1: 12.54 errD2: 11.72 
+g_loss0: -1.92 g_loss1: -3.11 g_loss2: -0.69 w_loss: 3.26 s_loss: 6.10 kl_loss: 0.01 
+errD0: 10.84 errD1: 12.58 errD2: 11.83 
+g_loss0: -2.00 g_loss1: -3.07 g_loss2: -0.71 w_loss: 1.59 s_loss: 5.33 kl_loss: 0.01 
+errD0: 11.00 errD1: 12.69 errD2: 11.88 
+g_loss0: -1.88 g_loss1: -3.01 g_loss2: -0.71 w_loss: 2.62 s_loss: 6.29 kl_loss: 0.01 
+errD0: 10.99 errD1: 12.54 errD2: 11.86 
+g_loss0: -1.97 g_loss1: -3.09 g_loss2: -0.80 w_loss: 1.76 s_loss: 4.30 kl_loss: 0.01 
+errD0: 10.96 errD1: 12.62 errD2: 11.88 
+g_loss0: -1.93 g_loss1: -3.12 g_loss2: -0.66 w_loss: 4.15 s_loss: 5.97 kl_loss: 0.01 
+[30/600][442]
+                  Loss_D: 35.49 Loss_G: 2.44 Time: 355.08s
+errD0: 10.91 errD1: 12.62 errD2: 11.86 
+g_loss0: -2.00 g_loss1: -3.13 g_loss2: -0.70 w_loss: 3.14 s_loss: 7.69 kl_loss: 0.01 
+errD0: 10.77 errD1: 12.45 errD2: 11.80 
+g_loss0: -1.98 g_loss1: -3.11 g_loss2: -0.78 w_loss: 5.40 s_loss: 7.48 kl_loss: 0.01 
+errD0: 10.85 errD1: 12.51 errD2: 11.83 
+g_loss0: -1.99 g_loss1: -3.10 g_loss2: -0.77 w_loss: 4.05 s_loss: 5.38 kl_loss: 0.01 
+errD0: 10.96 errD1: 12.61 errD2: 11.87 
+g_loss0: -1.96 g_loss1: -3.12 g_loss2: -0.78 w_loss: 2.09 s_loss: 5.48 kl_loss: 0.01 
+[31/600][442]
+                  Loss_D: 34.88 Loss_G: 1.17 Time: 379.29s
+errD0: 10.95 errD1: 12.64 errD2: 11.90 
+g_loss0: -1.99 g_loss1: -3.16 g_loss2: -0.73 w_loss: 1.97 s_loss: 5.51 kl_loss: 0.01 
+errD0: 11.03 errD1: 12.67 errD2: 11.90 
+g_loss0: -1.96 g_loss1: -3.11 g_loss2: -0.74 w_loss: 3.06 s_loss: 4.58 kl_loss: 0.01 
+errD0: 10.90 errD1: 12.55 errD2: 11.87 
+g_loss0: -2.00 g_loss1: -3.15 g_loss2: -0.66 w_loss: 2.17 s_loss: 4.13 kl_loss: 0.01 
+errD0: 10.91 errD1: 12.57 errD2: 11.81 
+g_loss0: -1.97 g_loss1: -3.11 g_loss2: -0.75 w_loss: 2.92 s_loss: 5.21 kl_loss: 0.01 
+[32/600][442]
+                  Loss_D: 35.28 Loss_G: 1.70 Time: 355.07s
+errD0: 10.88 errD1: 12.41 errD2: 11.71 
+g_loss0: -1.98 g_loss1: -3.17 g_loss2: -0.79 w_loss: 2.05 s_loss: 5.29 kl_loss: 0.01 
+errD0: 10.91 errD1: 12.55 errD2: 11.88 
+g_loss0: -1.97 g_loss1: -3.06 g_loss2: -0.69 w_loss: 2.11 s_loss: 5.18 kl_loss: 0.01 
+errD0: 10.84 errD1: 12.63 errD2: 11.87 
+g_loss0: -2.02 g_loss1: -3.14 g_loss2: -0.85 w_loss: 2.10 s_loss: 5.22 kl_loss: 0.01 
+errD0: 10.97 errD1: 12.70 errD2: 11.92 
+g_loss0: -1.97 g_loss1: -3.06 g_loss2: -0.65 w_loss: 2.31 s_loss: 6.02 kl_loss: 0.01 
+errD0: 10.80 errD1: 12.44 errD2: 11.89 
+g_loss0: -1.98 g_loss1: -3.11 g_loss2: -0.82 w_loss: 1.21 s_loss: 3.43 kl_loss: 0.01 
+[33/600][442]
+                  Loss_D: 35.28 Loss_G: 0.47 Time: 378.85s
+errD0: 11.07 errD1: 12.74 errD2: 11.94 
+g_loss0: -1.96 g_loss1: -3.17 g_loss2: -0.71 w_loss: 1.41 s_loss: 5.66 kl_loss: 0.01 
+errD0: 10.95 errD1: 12.66 errD2: 12.01 
+g_loss0: -2.06 g_loss1: -3.14 g_loss2: -0.78 w_loss: 1.35 s_loss: 3.78 kl_loss: 0.01 
+errD0: 10.86 errD1: 12.49 errD2: 11.87 
+g_loss0: -1.99 g_loss1: -3.05 g_loss2: -0.83 w_loss: 3.60 s_loss: 5.38 kl_loss: 0.01 
+errD0: 10.98 errD1: 12.56 errD2: 11.88 
+g_loss0: -2.01 g_loss1: -3.15 g_loss2: -0.75 w_loss: 3.68 s_loss: 5.35 kl_loss: 0.01 
+[34/600][442]
+                  Loss_D: 35.47 Loss_G: 2.68 Time: 354.92s
+errD0: 10.90 errD1: 12.45 errD2: 11.84 
+g_loss0: -1.99 g_loss1: -3.10 g_loss2: -0.86 w_loss: 4.09 s_loss: 6.72 kl_loss: 0.01 
+errD0: 11.03 errD1: 12.65 errD2: 11.83 
+g_loss0: -2.05 g_loss1: -3.06 g_loss2: -0.80 w_loss: 1.93 s_loss: 4.12 kl_loss: 0.01 
+errD0: 11.08 errD1: 12.68 errD2: 11.91 
+g_loss0: -1.97 g_loss1: -3.13 g_loss2: -0.80 w_loss: 1.83 s_loss: 4.30 kl_loss: 0.01 
+errD0: 10.93 errD1: 12.56 errD2: 11.88 
+g_loss0: -2.03 g_loss1: -3.11 g_loss2: -0.74 w_loss: 1.88 s_loss: 4.00 kl_loss: 0.01 
+errD0: 11.03 errD1: 12.57 errD2: 11.96 
+g_loss0: -1.98 g_loss1: -3.06 g_loss2: -0.76 w_loss: 1.89 s_loss: 4.48 kl_loss: 0.02 
+[35/600][442]
+                  Loss_D: 35.22 Loss_G: -0.27 Time: 354.86s
+errD0: 10.86 errD1: 12.39 errD2: 11.81 
+g_loss0: -2.06 g_loss1: -3.11 g_loss2: -0.75 w_loss: 1.59 s_loss: 5.20 kl_loss: 0.01 
+errD0: 10.99 errD1: 12.58 errD2: 11.94 
+g_loss0: -2.01 g_loss1: -3.02 g_loss2: -0.78 w_loss: 1.58 s_loss: 4.94 kl_loss: 0.01 
+errD0: 10.93 errD1: 12.66 errD2: 11.90 
+g_loss0: -2.04 g_loss1: -3.14 g_loss2: -0.83 w_loss: 1.97 s_loss: 3.83 kl_loss: 0.01 
+errD0: 10.74 errD1: 12.38 errD2: 11.83 
+g_loss0: -2.03 g_loss1: -3.05 g_loss2: -0.75 w_loss: 3.04 s_loss: 7.57 kl_loss: 0.01 
+[36/600][442]
+                  Loss_D: 35.03 Loss_G: 0.07 Time: 379.10s
+errD0: 10.89 errD1: 12.51 errD2: 11.92 
+g_loss0: -2.00 g_loss1: -3.08 g_loss2: -0.75 w_loss: 1.96 s_loss: 6.03 kl_loss: 0.01 
+errD0: 10.81 errD1: 12.48 errD2: 11.83 
+g_loss0: -2.01 g_loss1: -3.11 g_loss2: -0.83 w_loss: 2.29 s_loss: 5.04 kl_loss: 0.01 
+errD0: 10.97 errD1: 12.65 errD2: 11.99 
+g_loss0: -2.06 g_loss1: -3.17 g_loss2: -0.87 w_loss: 1.58 s_loss: 4.13 kl_loss: 0.01 
+errD0: 11.07 errD1: 12.47 errD2: 11.91 
+g_loss0: -1.97 g_loss1: -3.02 g_loss2: -0.79 w_loss: 1.66 s_loss: 4.55 kl_loss: 0.01 
+[37/600][442]
+                  Loss_D: 35.50 Loss_G: -0.55 Time: 355.09s
